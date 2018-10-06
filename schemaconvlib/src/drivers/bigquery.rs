@@ -5,6 +5,7 @@ use serde_json;
 use std::{fmt, io::Write, result};
 
 use Result;
+use gis::EpsgSrid;
 use table::{Column, DataType, Table};
 
 /// A BigQuery type.
@@ -252,7 +253,8 @@ fn bigquery_non_array_type(
         DataType::Decimal => Ok(NonArrayType::Numeric),
         DataType::Float32 => Ok(NonArrayType::Float64),
         DataType::Float64 => Ok(NonArrayType::Float64),
-        DataType::GeoJson => Ok(NonArrayType::Geography),
+        DataType::GeoJson(EpsgSrid(4326)) => Ok(NonArrayType::Geography),
+        DataType::GeoJson(_) => Ok(NonArrayType::String),
         DataType::Int16 => Ok(NonArrayType::Int64),
         DataType::Int32 => Ok(NonArrayType::Int64),
         DataType::Int64 => Ok(NonArrayType::Int64),

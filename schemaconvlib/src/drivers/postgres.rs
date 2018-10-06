@@ -9,6 +9,7 @@ use std::io::Write;
 use url::Url;
 
 use Result;
+use gis::EpsgSrid;
 use table::{Column, DataType, Table};
 
 table! {
@@ -100,12 +101,11 @@ impl PostgresDriver {
                 DataType::Array(_) => {
                     write!(f, "array_to_json({:?}) AS {:?}", col.name, col.name)?;
                 }
-                DataType::GeoJson => {
-                    // Always transform to SRID 4326, because
-                    // information_schema.columns won't tell us the SRID anyway.
+                DataType::GeoJson(_) => {
+                    // Always dump in the current SRID.
                     write!(
                         f,
-                        "ST_AsGeoJSON(ST_Transform({:?}, 4326)) AS {:?}",
+                        "ST_AsGeoJSON({:?}, 4326) AS {:?}",
                         col.name,
                         col.name,
                     )?;
@@ -171,7 +171,7 @@ fn pg_data_type(
         Ok(DataType::Array(Box::new(element_type)))
     } else if data_type == "USER-DEFINED" {
         let other_type = match udt_name {
-            "geometry" => DataType::GeoJson,
+            "geometry" => DataType::GeoJson(unimplemented!()),
             other => DataType::Other(other.to_owned()),
         };
         Ok(other_type)
@@ -252,7 +252,7 @@ fn parsing_pg_data_type() {
         (("USER-DEFINED", "public", "citext"),
          DataType::Other("citext".to_owned())),
         (("USER-DEFINED", "public", "geometry"),
-         DataType::GeoJson),
+         DataType::GeoJson(EpsgSrid(4326))),
     ];
     for ((data_type, udt_schema, udt_name), expected) in examples {
         assert_eq!(

@@ -1,5 +1,7 @@
 //! Core data types that we manipulate.
 
+use gis::EpsgSrid;
+
 /// Information about a table.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct Table {
@@ -58,8 +60,8 @@ pub enum DataType {
     Float32,
     /// 8-byte float.
     Float64,
-    /// Geodata in GeoJSON format, using SRID EPSG:4326 (aka WGS 84).
-    GeoJson,
+    /// Geodata in GeoJSON format, using the specified SRID.
+    GeoJson(EpsgSrid),
     /// 2-byte int.
     Int16,
     /// 4-byte integer.

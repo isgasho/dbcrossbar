@@ -18,8 +18,10 @@ extern crate url;
 use std::result;
 
 pub mod drivers;
+mod gis;
 mod table;
 
+pub use gis::*;
 pub use table::*;
 
 /// Standard error type for this library.profiler_builtins

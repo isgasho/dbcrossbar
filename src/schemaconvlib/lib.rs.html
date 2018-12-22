@@ -21,11 +21,11 @@
 <span id="21">21</span>
 <span id="22">22</span>
 <span id="23">23</span>
-<span id="24">24</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! A library for reading and writing table schemas in various formats.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! At the moment, the most interesting type here is `Table`.</span>
+<span class="doccomment">//! At the moment, the most interesting type here is the [`schema`](./schema/)</span>
+<span class="doccomment">//! module, which defines a portable SQL schema.</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>, <span class="ident">unused_extern_crates</span>, <span class="ident">clippy</span>::<span class="ident">pendantic</span>)]</span>
 
@@ -38,9 +38,7 @@
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">drivers</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">parsers</span>;
-<span class="kw">mod</span> <span class="ident">table</span>;
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">table</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">schema</span>;
 
 <span class="doccomment">/// Standard error type for this library.</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;

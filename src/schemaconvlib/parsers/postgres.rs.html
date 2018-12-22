@@ -107,7 +107,7 @@
 
 <span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">ResultExt</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">table</span>::<span class="ident">Table</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">schema</span>::<span class="ident">Table</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="prelude-ty">Result</span>;
 
 <span class="doccomment">/// Include our `rust-peg` grammar.</span>
@@ -127,7 +127,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">table</span>::{<span class="ident">Column</span>, <span class="ident">DataType</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">schema</span>::{<span class="ident">Column</span>, <span class="ident">DataType</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">simple_table</span>() {

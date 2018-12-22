@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["DataType","The data type of a column."]],"struct":[["Column","Information about a column."],["Table","Information about a table."]]});

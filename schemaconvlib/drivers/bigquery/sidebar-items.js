@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["BigQueryDriver","A driver for working with BigQuery."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse_create_table","Parse a PostgreSQL `CREATE TABLE` statement and return a `Table`."]]});

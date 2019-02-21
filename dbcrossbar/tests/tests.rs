@@ -131,14 +131,20 @@ fn cp_csv_to_csv() {
 
 #[test]
 #[ignore]
-fn cp_csv_to_postgres_to_gs_to_csv() {
+fn cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv() {
     env_logger::init();
-    let testdir = TestDir::new("dbcrossbar", "cp_csv_to_postgres_to_gs_to_csv");
+    let testdir = TestDir::new(
+        "dbcrossbar",
+        "cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv",
+    );
     let src = testdir.src_path("fixtures/example.csv");
     let schema = testdir.src_path("fixtures/example.sql");
-    let pg_table = post_test_table_url("cp_csv_to_postgres_to_gs_to_csv");
-    let gs_dir = gs_test_dir_url("cp_csv_to_postgres_to_gs_to_csv");
-    let bq_table = bq_test_table("cp_csv_to_postgres_to_gs_to_csv");
+    let pg_table =
+        post_test_table_url("cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv");
+    let gs_dir = gs_test_dir_url("cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv");
+    let bq_table = bq_test_table("cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv");
+    let gs_dir_2 =
+        gs_test_dir_url("cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv_2");
 
     // CSV to Postgres.
     testdir
@@ -160,7 +166,7 @@ fn cp_csv_to_postgres_to_gs_to_csv() {
         .tee_output()
         .expect_success();
 
-    // TEMP: gs:// to CSV, but ignore output until we can grab it back.
+    // gs:// to BigQuery.
     testdir
         .cmd()
         .args(&[
@@ -173,18 +179,37 @@ fn cp_csv_to_postgres_to_gs_to_csv() {
         .tee_output()
         .expect_success();
 
+    // BigQuery to gs://.
+    testdir
+        .cmd()
+        .args(&[
+            "cp",
+            "--if-exists=overwrite",
+            &format!("--schema=postgres-sql:{}", schema.display()),
+            &bq_table,
+            &gs_dir_2,
+        ])
+        .tee_output()
+        .expect_success();
+
     // gs:// to CSV.
     testdir
         .cmd()
         .args(&[
             "cp",
             &format!("--schema=postgres-sql:{}", schema.display()),
-            &gs_dir,
+            &gs_dir_2,
             "csv:out/",
         ])
         .tee_output()
         .expect_success();
 
     let expected = fs::read_to_string(&src).unwrap();
-    testdir.expect_file_contents("out/cp_csv_to_postgres_to_gs_to_csv.csv", &expected);
+    testdir.expect_file_contents(
+        "out/cp_csv_to_postgres_to_gs_to_bigquery_to_gs_to_csv.csv",
+        &expected,
+    );
 }
+
+// TODO: Testing loading straight from CSV to BigQuery, which uses
+// a different code path than the big round-trip test above.
